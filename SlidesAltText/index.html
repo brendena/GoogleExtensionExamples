@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+  </head>
+  <body>
+  
+  
+  
+    <div>
+      <h2>Input</h2>
+      <div>
+        <p style="display: inline">Title Text</p>
+        <input  style="width:100%" id="altTitle">
+      </div>
+      <div>
+        <p style="display: inline">Description Text</p>
+        <input  style="width:100%" id="altDescription">
+      </div>
+      <button style="width:100%" id="LoadText">Load Text Into Image's Alt Info</button>
+    </div>
+    
+    
+    <div>
+      <h2>Output</h2>
+      <button style="width:100%" id="GrabText">Grab Text From Image's Alt Info </button>
+      <p id="outputAltTitle"></p>
+      <p id="outputAltDescription"></p>
+    </div>
+    
+    
+    <h3 style="color:red;" id="errorLog">
+        
+    </h3>
+    
+    <div style="padding-top:50px">
+        <p>To see alt text, selection a item and click         Control + alt + Y </p>
+    
+    </div>
+    
+    
+    <script>
+      var success = function (){
+        document.getElementById('errorLog').innerHTML = "";
+        console.log("success")
+      }
+      
+      var error = function(error){
+        console.log(error);
+        document.getElementById('errorLog').innerHTML = error;
+      }
+      
+      document.getElementById("LoadText").addEventListener('click', function(){
+        console.log("Loading alt text");
+        google.script.run.withSuccessHandler(success).withFailureHandler(error).setAltText(document.getElementById('altTitle').value, document.getElementById('altDescription').value);
+      });
+      
+      document.getElementById("GrabText").addEventListener('click', function(){
+        console.log("Getting alt text");
+        google.script.run.withSuccessHandler(function(photoInfo){
+        
+          console.log("received data back");
+          console.log(photoInfo);
+          document.getElementById('outputAltTitle').innerHTML = "TITLE - " + photoInfo.title;
+          document.getElementById('outputAltDescription').innerHTML = "Description - " + photoInfo.description;
+          document.getElementById('errorLog').innerHTML = "";
+          
+        }).withFailureHandler(error).grabAltText();
+      });
+      
+      
+    </script>
+  </body>
+</html>
+
+
+
